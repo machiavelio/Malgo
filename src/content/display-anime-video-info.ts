@@ -10,6 +10,10 @@ export default async function initializeAnimeVideoPageChanges(): Promise<void> {
   if (domAnimeVideo && animeList) {
     const domActionsList = domAnimeVideo.querySelector("div.favorites_book")?.children[0] as Element;
 
+    (domActionsList as HTMLElement).style.display = "flex";
+    (domActionsList as HTMLElement).style.flexWrap = "wrap";
+    (domActionsList as HTMLElement).style.alignItems = "center";
+
     const animeName = domAnimeVideo.children[0].textContent?.replace(/( \(Dub\))? Episode.*gogoanime$/, "") as string;
     let anime = animeList.find((anime: Anime) => anime.name == animeName || anime.altName == animeName) as Anime;
 
@@ -70,20 +74,46 @@ export default async function initializeAnimeVideoPageChanges(): Promise<void> {
     }
   }
 
+  function displaySavePopup() {
+    const popup = document.createElement("div");
+    popup.innerHTML = `Changes saved`;
+    popup.style.backgroundColor = "green";
+    popup.style.padding = "1rem";
+    popup.style.borderRadius = "0.25rem";
+    popup.style.boxShadow = "0px 0px 10px 5px #000";
+    popup.style.color = "#fff";
+    popup.style.position = "fixed";
+    popup.style.top = "0";
+    popup.style.left = "50%";
+    popup.style.transform = "translateX(-50%)";
+    popup.style.zIndex = "10";
+
+    document.body.appendChild(popup);
+
+    const timeout = setTimeout(() => {
+      popup.remove();
+      clearTimeout(timeout);
+    }, 1000);
+  }
+
   function createStatusElement(anime: Anime, callback: (e: Event) => void) {
     const statusElement = document.createElement("li");
     statusElement.innerHTML = `
     <select name="status" id="status">
-        <option value="0">${anime ? "Remove" : "Not Saved"}</option>
-        <option value="1">Watching</option>
-        <option value="2">Completed</option>
-        <option value="3">On Hold</option>
-        <option value="4">Dropped</option>
-        <option value="6">Plan to Watch</option>
+      <option value="0">${anime ? "Remove" : "Not Saved"}</option>
+      <option value="1">Watching</option>
+      <option value="2">Completed</option>
+      <option value="3">On Hold</option>
+      <option value="4">Dropped</option>
+      <option value="6">Plan to Watch</option>
     </select>
     `;
+    statusElement.style.padding = "0";
+    statusElement.style.cursor = "pointer";
 
     const statusSelect = statusElement.children[0] as HTMLSelectElement;
+
+    statusSelect.style.height = "100%";
 
     if (anime) {
       statusSelect.value = anime.status.toString();
@@ -98,21 +128,25 @@ export default async function initializeAnimeVideoPageChanges(): Promise<void> {
     const scoreElement = document.createElement("li");
     scoreElement.innerHTML = `
     <select name="score" id="score">
-        <option selected value="0">&#9733; select</option>
-        <option value="10">Masterpiece</option>
-        <option value="9">Great</option>
-        <option value="8">Very Good</option>
-        <option value="7">Good</option>
-        <option value="6">Fine</option>
-        <option value="5">Average</option>
-        <option value="4">Bad</option>
-        <option value="3">Very Bad</option>
-        <option value="2">Horrible</option>
-        <option value="1">Appalling</option>
+      <option selected value="0">Score</option>
+      <option value="10">(10) Masterpiece</option>
+      <option value="9">(9) Great</option>
+      <option value="8">(8) Very Good</option>
+      <option value="7">(7) Good</option>
+      <option value="6">(6) Fine</option>
+      <option value="5">(5) Average</option>
+      <option value="4">(4) Bad</option>
+      <option value="3">(3) Very Bad</option>
+      <option value="2">(2) Horrible</option>
+      <option value="1">(1) Appalling</option>
     </select>
     `;
+    scoreElement.style.padding = "0";
+    scoreElement.style.cursor = "pointer";
 
     const scoreSelect = scoreElement.children[0] as HTMLSelectElement;
+
+    scoreSelect.style.height = "100%";
 
     if (anime) {
       scoreSelect.value = anime.score.toString();
@@ -126,10 +160,27 @@ export default async function initializeAnimeVideoPageChanges(): Promise<void> {
   function createEpisodesElement(anime: Anime, callback: (e: Event) => void) {
     const episodesElement = document.createElement("li");
     episodesElement.innerHTML = `
-        <span>Episodes:</span>
-        <input type="number" value="${anime?.numOfEpisodesWatched || 0}" style="width: 50px" />
-        <span>/ ${anime?.numOfEpisodes || "?"}</span>
+      <style>
+      input#input-malgo {
+        width: 50px;
+        text-align: right;
+        border: none;
+      }
+      input#input-malgo::-webkit-outer-spin-button,
+      input#input-malgo::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+      </style>
+      <span style="color: #000; font-size: 13.33px">Episodes:</span>
+      <input id="input-malgo" type="number" value="${anime?.numOfEpisodesWatched || 0}" />
+      <span style="color: #000; padding-right: 5px">/ ${anime?.numOfEpisodes || "?"}</span>
     `;
+    episodesElement.style.padding = "0";
+    episodesElement.style.backgroundColor = "#fff";
+    episodesElement.style.cursor = "pointer";
+    episodesElement.style.display = "inline-flex";
+    episodesElement.style.alignItems = "center";
 
     const episodesInput = episodesElement.children[1] as HTMLInputElement;
 

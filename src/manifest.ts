@@ -1,5 +1,5 @@
 const manifest: chrome.runtime.Manifest = {
-  name: "malgo",
+  name: "Malgo",
   version: "1.0.0",
   manifest_version: 2,
   background: {
@@ -8,7 +8,8 @@ const manifest: chrome.runtime.Manifest = {
   content_scripts: [
     {
       js: ["content/index.ts"],
-      matches: ["*://*.gogoanime.pe/*"],
+      matches: ["*://*.gogoanime.fi/*"],
+      run_at: "document_start",
     },
   ],
   browser_action: {

@@ -47,10 +47,10 @@ export default async function initializeAnimeListPageChanges(): Promise<void> {
   function applyAnimeInfo(element: Element, name: string, anime: any): void {
     const score = document.createElement("div");
     score.innerHTML = `
-  <div title="Score according to MAL">Score: ${anime.mean ?? anime.score ?? "N/A"}</div>
-  <div title="Top ranked according to MAL">Ranked: ${anime.rank ?? anime.ranked ?? "N/A"}</div>
-  <div title="Top popularity according to MAL">Popularity: ${anime.popularity ?? "N/A"}</div>
-  `;
+    <div title="Score according to MAL">Score: ${anime.mean ?? anime.score ?? "N/A"}</div>
+    <div title="Top ranked according to MAL">Ranked: ${anime.rank ?? anime.ranked ?? "N/A"}</div>
+    <div title="Top popularity according to MAL">Popularity: ${anime.popularity ?? "N/A"}</div>
+    `;
     score.style.position = "absolute";
     score.style.top = "0";
     score.style.left = "2px";

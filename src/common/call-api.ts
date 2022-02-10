@@ -1,7 +1,6 @@
 const clientSecret = "a09e3458367bbd5eccb06484fecbc5fa4069cfdd4efe9bb863fb242cd9fcd1a1";
 const clientId = "d17aeabc292e2928d936f61d4d410fab";
 
-import { AnimeList } from "../models/anime-list.model";
 import { Anime } from "../models/anime.model";
 import storage from "./storage-sync";
 
