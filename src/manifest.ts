@@ -1,6 +1,7 @@
 const manifest: chrome.runtime.Manifest = {
   name: "Malgo",
   version: "1.0.0",
+  description: "Integrate MyAnimeList anime data into Gogoanime",
   manifest_version: 2,
   background: {
     scripts: ["background/index.ts"],

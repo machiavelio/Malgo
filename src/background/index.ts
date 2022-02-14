@@ -32,10 +32,27 @@ async function retrieveTokens(authorizeResponseUrl: string, nouce: string) {
   return tokensResponse;
 }
 
-chrome.runtime.onMessage.addListener(async (request, _, response) => {
+async function getTokens(responseUrl: string, nouce: string) {
+  const tokens = await retrieveTokens(responseUrl, nouce);
+
+  const saveTokens = {
+    expiresAt: Date.now() + tokens.expires_in * 1000,
+    accessToken: tokens.access_token,
+    refreshToken: tokens.refresh_token,
+  };
+
+  await storage.set(saveTokens);
+
+  const { name } = await callApi("https://api.myanimelist.net/v2/users/@me");
+
+  await storage.set({ username: name });
+}
+
+chrome.runtime.onMessage.addListener((request, _, response) => {
   if (request === "mal-logout") {
-    await storage.clear();
-    response(true);
+    storage.clear().then(() => {
+      response(true);
+    });
   }
 
   if (request === "mal-login") {
@@ -51,22 +68,12 @@ chrome.runtime.onMessage.addListener(async (request, _, response) => {
           response(false);
         }
 
-        const tokens = await retrieveTokens(responseUrl as string, nouce);
-
-        const saveTokens = {
-          expiresAt: Date.now() + tokens.expires_in * 1000,
-          accessToken: tokens.access_token,
-          refreshToken: tokens.refresh_token,
-        };
-
-        await storage.set(saveTokens);
-
-        const { name } = await callApi("https://api.myanimelist.net/v2/users/@me");
-
-        await storage.set({ username: name });
-
-        response(true);
+        getTokens(responseUrl as string, nouce).then(() => {
+          response(true);
+        });
       },
     );
   }
+
+  return true;
 });

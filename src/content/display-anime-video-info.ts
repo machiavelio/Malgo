@@ -46,6 +46,7 @@ export default async function initializeAnimeVideoPageChanges(): Promise<void> {
         episodesElement.children[2].textContent = `/ ${anime.numOfEpisodes}`;
       }
       await storage.set({ animeList });
+      displaySavePopdown();
     };
 
     const scoreChanged = async (e: Event) => {
@@ -53,6 +54,7 @@ export default async function initializeAnimeVideoPageChanges(): Promise<void> {
       anime.score = value;
       await updateAnime(anime);
       await storage.set({ animeList });
+      displaySavePopdown();
     };
 
     const episodesChanged = async (e: Event) => {
@@ -60,6 +62,7 @@ export default async function initializeAnimeVideoPageChanges(): Promise<void> {
       anime.numOfEpisodesWatched = value;
       await updateAnime(anime);
       await storage.set({ animeList });
+      displaySavePopdown();
     };
 
     const statusElement = createStatusElement(anime as Anime, statusChanged);
@@ -74,26 +77,44 @@ export default async function initializeAnimeVideoPageChanges(): Promise<void> {
     }
   }
 
-  function displaySavePopup() {
-    const popup = document.createElement("div");
-    popup.innerHTML = `Changes saved`;
-    popup.style.backgroundColor = "green";
-    popup.style.padding = "1rem";
-    popup.style.borderRadius = "0.25rem";
-    popup.style.boxShadow = "0px 0px 10px 5px #000";
-    popup.style.color = "#fff";
-    popup.style.position = "fixed";
-    popup.style.top = "0";
-    popup.style.left = "50%";
-    popup.style.transform = "translateX(-50%)";
-    popup.style.zIndex = "10";
+  function displaySavePopdown() {
+    document.getElementById("changes-saved-popdown")?.remove();
+    const popdown = document.createElement("div");
+    popdown.innerHTML = `
+    <style>
+      #changes-saved-popdown {
+        animation: popdown 0.4s ease-out;
+      }
+      @keyframes popdown {
+        0% {
+          top: -100px;
+        }
+        100% {
+          top: 1rem;
+        }
+      }
+    </style>
+    Changes saved
+    `;
+    popdown.id = "changes-saved-popdown";
+    popdown.style.backgroundColor = "#2db039";
+    popdown.style.padding = "0.75rem";
+    popdown.style.borderRadius = "0.25rem";
+    popdown.style.boxShadow = "0px 0px 10px 5px #000";
+    popdown.style.color = "#fff";
+    popdown.style.position = "fixed";
+    popdown.style.top = "1rem";
+    popdown.style.left = "50%";
+    popdown.style.transform = "translateX(-50%)";
+    popdown.style.zIndex = "10";
+    popdown.style.fontSize = "1rem";
 
-    document.body.appendChild(popup);
+    document.body.appendChild(popdown);
 
     const timeout = setTimeout(() => {
-      popup.remove();
+      popdown.remove();
       clearTimeout(timeout);
-    }, 1000);
+    }, 2000);
   }
 
   function createStatusElement(anime: Anime, callback: (e: Event) => void) {
@@ -161,18 +182,23 @@ export default async function initializeAnimeVideoPageChanges(): Promise<void> {
     const episodesElement = document.createElement("li");
     episodesElement.innerHTML = `
       <style>
-      input#input-malgo {
-        width: 50px;
-        text-align: right;
-        border: none;
-      }
-      input#input-malgo::-webkit-outer-spin-button,
-      input#input-malgo::-webkit-inner-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-      }
+        input#input-malgo {
+          width: 50px;
+          text-align: right;
+          border: none;
+          padding-right: 2px;
+        }
+        input#input-malgo:focus {
+          background-color: #dfdfdf;
+          border-radius: 0.25rem;
+        }
+        input#input-malgo::-webkit-outer-spin-button,
+        input#input-malgo::-webkit-inner-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
       </style>
-      <span style="color: #000; font-size: 13.33px">Episodes:</span>
+      <span style="color: #000; font-size: 13.33px; margin-right: 5px">Episodes:</span>
       <input id="input-malgo" type="number" value="${anime?.numOfEpisodesWatched || 0}" />
       <span style="color: #000; padding-right: 5px">/ ${anime?.numOfEpisodes || "?"}</span>
     `;
@@ -181,8 +207,9 @@ export default async function initializeAnimeVideoPageChanges(): Promise<void> {
     episodesElement.style.cursor = "pointer";
     episodesElement.style.display = "inline-flex";
     episodesElement.style.alignItems = "center";
+    episodesElement.style.cursor = "default";
 
-    const episodesInput = episodesElement.children[1] as HTMLInputElement;
+    const episodesInput = episodesElement.children[2] as HTMLInputElement;
 
     episodesInput.onchange = callback;
 

@@ -26,9 +26,22 @@ const App = (): JSX.Element => {
   };
 
   return (
-    <div>
-      {user && <div>Hello {user}</div>}
-      {!user ? <button onClick={malAuth}>MAL Auth</button> : <button onClick={malLogout}>Logout</button>}
+    <div className="content">
+      <div className="title">Malgo</div>
+      <div className="info">
+        Integrate MyAnimeList anime data into Gogoanime website. Login with MAL account to also track and modify your
+        list
+      </div>
+      {user && <div className="logged-msg">Logged in as {user}</div>}
+      {!user ? (
+        <button className="btn login-btn" onClick={malAuth}>
+          Sign In
+        </button>
+      ) : (
+        <button className="btn logout-btn" onClick={malLogout}>
+          Sign out
+        </button>
+      )}
     </div>
   );
 };

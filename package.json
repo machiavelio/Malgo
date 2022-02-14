@@ -2,7 +2,7 @@
   "name": "malgo",
   "version": "1.0.0",
   "private": true,
-  "description": "integrate myanimelist into gogoanime",
+  "description": "Integrate MyAnimeList anime data into Gogoanime",
   "author": "machiavelio",
   "scripts": {
     "build": "rollup -c",
@@ -13,8 +13,10 @@
   },
   "dependencies": {
     "@rollup/plugin-replace": "^3.0.0",
+    "postcss": "^8.4.6",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "rollup-plugin-postcss": "^4.0.2",
     "webextension-polyfill": "^0.7.0"
   },
   "devDependencies": {

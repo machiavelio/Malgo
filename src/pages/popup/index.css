@@ -1,0 +1,60 @@
+body {
+  color: red;
+  min-width: 250px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #161b22;
+  color: #f0f6fc;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn {
+  cursor: pointer;
+  color: #f0f6fc;
+  border: none;
+  font-size: 0.9rem;
+  outline: none;
+  border-radius: 0.25rem;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.btn:hover {
+  opacity: 0.9;
+}
+
+.btn:active {
+  opacity: 0.8;
+}
+
+.login-btn {
+  background-color: #1d439b;
+}
+
+.logout-btn {
+  background-color: #cc3300;
+}
+
+.title {
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.info {
+  text-align: center;
+  margin-top: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.logged-msg {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}

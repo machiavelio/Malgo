@@ -1,5 +1,5 @@
 import path from "path";
-
+import css from "rollup-plugin-postcss";
 import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import typescript from "@rollup/plugin-typescript";
@@ -28,6 +28,7 @@ export default {
     simpleReloader(),
     resolve(),
     commonjs(),
+    css(),
     typescript(),
     // Empties the output dir before a new build
     emptyDir(),

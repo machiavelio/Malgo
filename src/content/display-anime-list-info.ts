@@ -44,13 +44,62 @@ export default async function initializeAnimeListPageChanges(): Promise<void> {
     }
   }
 
+  function applyLoadingSpinner(element: Element): HTMLElement {
+    const loader = document.createElement("div");
+    loader.innerHTML = `
+    <style>
+      .loader-point-1 {
+        animation: fade-point 0.4s ease-in-out 0.4s infinite alternate;
+      }
+      .loader-point-2 {
+        animation: fade-point 0.4s ease-in-out 0.5s infinite alternate;
+      }
+      .loader-point-3 {
+        animation: fade-point 0.4s ease-in-out 0.6s infinite alternate;
+      }
+      @keyframes fade-point {
+        0% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+    </style>
+      
+    Malgo
+    <span class="loader-point-1">.</span>
+    <span class="loader-point-2">.</span>
+    <span class="loader-point-3">.</span>
+    `;
+
+    loader.style.position = "absolute";
+    loader.style.top = "0";
+    loader.style.left = "2px";
+    loader.style.textAlign = "left";
+    loader.style.fontSize = "18px";
+    loader.style.fontFamily = "Helvetica";
+    loader.style.textShadow = "-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000";
+    loader.style.color = "#fff";
+    loader.style.fontWeight = "bold";
+
+    element.appendChild(loader);
+
+    return loader;
+  }
+
   function applyAnimeInfo(element: Element, name: string, anime: any): void {
     const score = document.createElement("div");
     score.innerHTML = `
     <div title="Score according to MAL">Score: ${anime.mean ?? anime.score ?? "N/A"}</div>
-    <div title="Top ranked according to MAL">Ranked: ${anime.rank ?? anime.ranked ?? "N/A"}</div>
-    <div title="Top popularity according to MAL">Popularity: ${anime.popularity ?? "N/A"}</div>
+    <div title="Top ranked according to MAL">Ranked: ${
+      (anime.rank ?? anime.ranked)?.toString().replace("#", "") ?? "N/A"
+    }</div>
+    <div title="Top popularity according to MAL">Popularity: ${
+      anime.popularity?.toString().replace("#", "") ?? "N/A"
+    }</div>
     `;
+
     score.style.position = "absolute";
     score.style.top = "0";
     score.style.left = "2px";
@@ -73,7 +122,9 @@ export default async function initializeAnimeListPageChanges(): Promise<void> {
 
       const animeName = domAnime.children[1].children[0].textContent?.replace(/ \(Dub\)$/, "") as string;
 
+      const loader = applyLoadingSpinner(domAnime);
       getAnime(animeName).then((response) => {
+        loader.remove();
         applyAnimeInfo(domAnime, animeName, response);
       });
     }
