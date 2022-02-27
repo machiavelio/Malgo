@@ -8,6 +8,10 @@ export default async function initializeAnimeVideoPageChanges(): Promise<void> {
   const animeList: Array<Anime> = (await storage.get("animeList")).animeList;
 
   if (domAnimeVideo && animeList) {
+    (
+      document.querySelector("div.download-anime .anime_video_note_watch .anime_video_body_report") as HTMLElement
+    ).style.top = "initial";
+
     const domActionsList = domAnimeVideo.querySelector("div.favorites_book")?.children[0] as Element;
 
     (domActionsList as HTMLElement).style.display = "flex";

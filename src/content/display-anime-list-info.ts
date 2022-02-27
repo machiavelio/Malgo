@@ -144,6 +144,7 @@ export default async function initializeAnimeListPageChanges(): Promise<void> {
         subElement.style.paddingLeft = "2px";
         subElement.style.paddingBottom = "2px";
         subElement.style.fontWeight = "bold";
+        subElement.style.opacity = "1";
         subElement.style.fontSize = "16px";
         subElement.style.fontFamily = "Helvetica";
         subElement.style.textShadow = "-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000";
@@ -156,11 +157,22 @@ export default async function initializeAnimeListPageChanges(): Promise<void> {
         statusElement.style.bottom = "2px";
         statusElement.style.left = "2px";
         statusElement.style.fontWeight = "bold";
+        statusElement.style.opacity = "1";
         statusElement.style.fontSize = "16px";
         statusElement.style.fontFamily = "Helvetica";
         statusElement.style.textShadow = "-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000";
         aElement.appendChild(statusElement);
       }
+
+      (aElement as HTMLElement).innerHTML += `
+      <style>
+      ul.items li .img a:hover:after {
+        background-position-x: right;
+        z-index: 5;
+        opacity: 1;
+      }
+      </style>
+      `;
     };
 
     const anime = animeList.find((anime: Anime) => anime.name == name);

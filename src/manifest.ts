@@ -1,3 +1,5 @@
+const domains = ["pe", "fi"];
+
 const manifest: chrome.runtime.Manifest = {
   name: "Malgo",
   version: "1.0.0",
@@ -9,7 +11,7 @@ const manifest: chrome.runtime.Manifest = {
   content_scripts: [
     {
       js: ["content/index.ts"],
-      matches: ["*://*.gogoanime.fi/*"],
+      matches: domains.map((domain: string) => `*://*.gogoanime.${domain}/*`),
       run_at: "document_start",
     },
   ],
